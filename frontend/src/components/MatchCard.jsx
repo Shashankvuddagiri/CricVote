@@ -10,6 +10,7 @@ const MatchCard = ({ match, matchId, user }) => {
   const [timeRemaining, setTimeRemaining] = useState('');
   const [voteStats, setVoteStats] = useState({ totalVotes: 0, aPct: 50, bPct: 50 });
   const [hasVoted, setHasVoted] = useState(null); 
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     // Check if user already voted in Phase 2
@@ -93,6 +94,8 @@ const MatchCard = ({ match, matchId, user }) => {
       );
 
       setHasVoted(team);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
     } catch (err) {
       alert(err.message || 'Failed to process vote');
     }
@@ -170,21 +173,33 @@ const MatchCard = ({ match, matchId, user }) => {
                   Voting opens on {startTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
               </div>
           ) : (
-            <div className="flex gap-4 w-full">
-                <button 
-                onClick={() => handleVote('teamA')}
-                disabled={isLocked || hasVoted}
-                className={`flex-1 py-4 font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-1 ${isLocked ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : hasVoted === 'teamA' ? 'bg-green-500 text-white' : hasVoted ? 'bg-gray-500/50 text-white cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 text-white'}`}
-                >
-                {hasVoted === 'teamA' ? '✓ Voted' : `Vote ${match.teamA_short || 'A'}`}
-                </button>
-                <button 
-                onClick={() => handleVote('teamB')}
-                disabled={isLocked || hasVoted}
-                className={`flex-1 py-4 font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-1 ${isLocked ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : hasVoted === 'teamB' ? 'bg-green-500 text-white' : hasVoted ? 'bg-gray-500/50 text-white cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-400 text-gray-900'}`}
-                >
-                {hasVoted === 'teamB' ? '✓ Voted' : `Vote ${match.teamB_short || 'B'}`}
-                </button>
+            <div className="w-full">
+                {hasVoted ? (
+                    <div className="py-4 bg-green-500/10 border border-green-500/30 rounded-xl flex flex-col items-center animate-in zoom-in duration-300">
+                        <span className="text-green-400 font-black uppercase text-xs tracking-widest flex items-center gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                             Prediction Locked
+                        </span>
+                        {showSuccess && <span className="text-[10px] text-white/50 font-bold mt-1">Arena Intelligence Synchronized!</span>}
+                    </div>
+                ) : (
+                    <div className="flex gap-4 w-full">
+                        <button 
+                        onClick={() => handleVote('teamA')}
+                        disabled={isLocked}
+                        className={`flex-1 py-4 font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-1 ${isLocked ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 text-white'}`}
+                        >
+                        Vote {match.teamA_short || 'A'}
+                        </button>
+                        <button 
+                        onClick={() => handleVote('teamB')}
+                        disabled={isLocked}
+                        className={`flex-1 py-4 font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-1 ${isLocked ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-400 text-gray-900'}`}
+                        >
+                        Vote {match.teamB_short || 'B'}
+                        </button>
+                    </div>
+                )}
             </div>
           )}
         </div>

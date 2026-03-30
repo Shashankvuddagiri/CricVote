@@ -1,0 +1,9 @@
+node_modules/
+.env
+appwrite_function.env
+syncIPLMatches.tar.gz
+*.json
+*.txt
+.DS_Store
+dist/
+build/
