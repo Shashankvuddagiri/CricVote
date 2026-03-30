@@ -61,39 +61,39 @@ function MainApp() {
   if (loading) return <div className="min-h-screen bg-indigo-900 text-white flex items-center justify-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white flex flex-col pt-10 px-4">
-      <header className="flex justify-between items-center max-w-5xl mx-auto w-full mb-10">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white flex flex-col pt-6 md:pt-10 px-4">
+      <header className="flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto w-full mb-8 md:mb-10 gap-6">
         <div className="flex items-center gap-3">
-          <img src={logo} alt="MML Logo" className="w-14 h-14 object-contain drop-shadow-2xl" />
-          <button onClick={() => setView('home')} className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500 text-left">
+          <img src={logo} alt="MML Logo" className="w-10 h-10 md:w-14 md:h-14 object-contain drop-shadow-2xl" />
+          <button onClick={() => setView('home')} className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500 text-left">
             MML IPL Predictions
           </button>
         </div>
 
-        <div className="hidden md:flex gap-4 items-center">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4 items-center">
           {isAdmin && (
             <button
               onClick={() => setView(view === 'admin' ? 'home' : 'admin')}
-              className={`px-4 py-2 rounded-full font-black uppercase text-[10px] border tracking-widest transition-all ${view === 'admin' ? 'bg-red-500 text-white border-red-500 shadow-lg shadow-red-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-black uppercase text-[9px] md:text-[10px] border tracking-widest transition-all ${view === 'admin' ? 'bg-red-500 text-white border-red-500 shadow-lg shadow-red-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
             >
-              {view === 'admin' ? 'Exit Admin' : 'Admin Panel'}
+              {view === 'admin' ? 'Exit Admin' : 'Admin'}
             </button>
           )}
           <button
             onClick={() => setView(view === 'leaderboard' ? 'home' : 'leaderboard')}
-            className={`px-4 py-2 rounded-full transition-all text-xs font-bold uppercase backdrop-blur-sm border ${view === 'leaderboard' ? 'bg-white/20 border-white/30' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+            className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all text-[10px] md:text-xs font-bold uppercase backdrop-blur-sm border ${view === 'leaderboard' ? 'bg-white/20 border-white/30' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
           >
             Leaderboard
           </button>
 
           {user ? (
-            <div className="flex gap-4 items-center bg-white/10 px-4 py-2 rounded-full border border-white/10 shadow-lg">
-              <span className="font-bold text-indigo-100">{profile?.username || user.name}</span>
-              <span className="font-bold text-yellow-400">{profile?.points || 0} PTS</span>
-              <button onClick={logout} className="text-xs font-bold hover:text-red-400 ml-2 border-l border-white/20 pl-4 uppercase tracking-tighter">Logout</button>
+            <div className="flex gap-2 md:gap-4 items-center bg-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg">
+              <span className="font-bold text-indigo-100 text-[10px] md:text-sm truncate max-w-[80px] md:max-w-none">{profile?.username || user.name}</span>
+              <span className="font-bold text-yellow-400 text-[10px] md:text-sm">{profile?.points || 0} PTS</span>
+              <button onClick={logout} className="text-[10px] font-bold hover:text-red-400 ml-1 md:ml-2 border-l border-white/20 pl-2 md:pl-4 uppercase tracking-tighter">Logout</button>
             </div>
           ) : (
-            <button onClick={() => setIsLoginModalOpen(true)} className="px-5 py-2 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-purple-900 font-bold shadow-lg transform transition hover:-translate-y-0.5">
+            <button onClick={() => setIsLoginModalOpen(true)} className="px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-purple-900 font-bold shadow-lg transform transition hover:-translate-y-0.5 text-xs md:text-base">
               Login
             </button>
           )}

@@ -113,44 +113,48 @@ const MatchCard = ({ match, matchId, user }) => {
         </span>
       </div>
 
-      <div className="bg-gradient-to-b from-indigo-800/80 to-purple-900/90 rounded-[1.35rem] p-8 pb-10 flex flex-col items-center text-center relative z-10">
-        <p className="text-indigo-200 text-sm font-semibold mb-2 uppercase tracking-widest">{match.venue}</p>
-        <h2 className="text-2xl font-bold mb-8">{match.teamA_name} vs {match.teamB_name}</h2>
+      <div className="bg-gradient-to-b from-indigo-800/80 to-purple-900/90 rounded-[1.35rem] p-4 md:p-8 pb-10 flex flex-col items-center text-center relative z-10">
+        <p className="text-indigo-200 text-[10px] md:text-sm font-semibold mb-2 uppercase tracking-widest">{match.venue}</p>
+        <h2 className="text-lg md:text-2xl font-bold mb-6 md:mb-8 px-4">{match.teamA_name} vs {match.teamB_name}</h2>
 
-        <div className="flex justify-between items-center w-full max-w-md mx-auto mb-10">
-          <div className="flex flex-col items-center flex-1">
-            <div className={`w-28 h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamA' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-md mx-auto mb-8 md:mb-10 gap-6 md:gap-0">
+          <div className="flex flex-row md:flex-col items-center flex-1 gap-4 md:gap-0">
+            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamA' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
               {match.teamA_logo ? (
                 <img src={match.teamA_logo} alt={match.teamA_name} className="w-full h-full object-contain p-2" />
               ) : (
-                <span className="text-2xl font-black text-white">{match.teamA_short}</span>
+                <span className="text-xl md:text-2xl font-black text-white">{match.teamA_short}</span>
               )}
             </div>
-            <span className="font-bold text-lg text-white">{match.teamA_short}</span>
-            <span className="font-bold text-sm text-indigo-300">{voteStats.aPct}%</span>
+            <div className="text-left md:text-center">
+              <span className="block font-bold text-base md:text-lg text-white">{match.teamA_short}</span>
+              <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.aPct}%</span>
+            </div>
           </div>
 
-          <div className="flex flex-col items-center px-4">
-            <span className="text-4xl font-black text-white/50 italic mb-2">VS</span>
+          <div className="flex flex-row md:flex-col items-center px-4 gap-3 md:gap-0">
+            <span className="text-2xl md:text-4xl font-black text-white/50 italic mb-0 md:mb-2 leading-none">VS</span>
             {isMatchToday ? (
-                <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full text-indigo-100 border border-white/10 whitespace-nowrap">{timeRemaining}</span>
+                <span className="text-[10px] md:text-sm font-medium bg-white/20 px-3 py-1 rounded-full text-indigo-100 border border-white/10 whitespace-nowrap">{timeRemaining}</span>
             ) : (
-                <span className="text-xs font-black bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full border border-yellow-500/50 uppercase tracking-widest">
+                <span className="text-[10px] font-black bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full border border-yellow-500/50 uppercase tracking-widest">
                     {startTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
                 </span>
             )}
           </div>
 
-          <div className="flex flex-col items-center flex-1">
-            <div className={`w-28 h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamB' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
+          <div className="flex flex-row-reverse md:flex-col items-center flex-1 gap-4 md:gap-0">
+            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamB' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
               {match.teamB_logo ? (
                 <img src={match.teamB_logo} alt={match.teamB_name} className="w-full h-full object-contain p-2" />
               ) : (
-                <span className="text-2xl font-black text-white">{match.teamB_short}</span>
+                <span className="text-xl md:text-2xl font-black text-white">{match.teamB_short}</span>
               )}
             </div>
-             <span className="font-bold text-lg text-white">{match.teamB_short}</span>
-            <span className="font-bold text-sm text-indigo-300">{voteStats.bPct}%</span>
+            <div className="text-right md:text-center">
+               <span className="block font-bold text-base md:text-lg text-white">{match.teamB_short}</span>
+               <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.bPct}%</span>
+            </div>
           </div>
         </div>
 
