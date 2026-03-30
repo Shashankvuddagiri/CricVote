@@ -1,0 +1,91 @@
+2024-09-03 20:51:07 Resource server started on port 8828
+2024-09-03 20:53:29 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-03 20:53:32 Closing connection 1725377009333/complisundev
+2024-09-03 20:53:39 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-03 20:53:40 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-04 09:02:32 Resource server started on port 8828
+2024-09-04 11:40:49 Resource server started on port 8828
+2024-09-04 12:40:07 Resource server started on port 8828
+2024-09-04 12:47:11 Resource server started on port 8828
+2024-09-04 13:27:25 Resource server started on port 8828
+2024-09-04 13:34:25 Resource server started on port 8828
+2024-09-04 15:29:51 Resource server started on port 8828
+2024-09-04 15:37:25 Resource server started on port 8828
+2024-09-04 18:33:58 Resource server started on port 8828
+2024-09-04 18:34:40 Resource server started on port 8828
+2024-09-04 21:20:13 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-05 11:52:57 Resource server started on port 8828
+2024-09-05 12:32:25 Resource server started on port 8828
+2024-09-05 12:34:48 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-05 12:36:35 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-05 12:48:56 Resource server started on port 8828
+2024-09-05 13:07:39 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-05 14:09:14 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-05 18:06:40 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-06 12:21:19 Resource server started on port 8828
+2024-09-06 12:21:40 Resource server started on port 8828
+2024-09-06 12:24:51 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-06 15:20:24 Resource server started on port 8828
+2024-09-06 15:23:27 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-06 15:23:35 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-08 20:20:27 Resource server started on port 8828
+2024-09-08 20:26:24 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-09 11:27:21 Resource server started on port 8828
+2024-09-09 11:50:22 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-09 18:56:27 Resource server started on port 8828
+2024-09-09 19:06:58 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-10 13:12:09 Resource server started on port 8828
+2024-09-10 13:19:16 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-10 15:11:00 Resource server started on port 8828
+2024-09-10 16:19:08 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-11 13:13:21 Resource server started on port 8828
+2024-09-11 13:13:45 Resource server started on port 8828
+2024-09-11 19:13:59 Resource server started on port 8828
+2024-09-11 19:14:16 Resource server started on port 8828
+2024-09-11 19:14:25 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-12 13:06:03 Resource server started on port 8828
+2024-09-12 13:06:20 Resource server started on port 8828
+2024-09-12 13:28:47 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 11:36:55 Resource server started on port 8828
+2024-09-13 11:39:25 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 11:42:18 Resource server started on port 8828
+2024-09-13 11:45:22 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 11:45:41 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 12:22:35 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 12:22:40 Closing connection 1725377009333/complisundev
+2024-09-13 12:22:53 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 12:24:25 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 12:25:30 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 13:44:57 Execute fail : SELECT * FROM onboarding_onboardingdetails LIMIT 100
+2024-09-13 13:44:57 read ECONNRESET
+2024-09-13 13:45:01 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 15:06:18 Resource server started on port 8828
+2024-09-13 15:06:27 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 15:06:32 Closing connection 1725377009333/complisundev_tree
+2024-09-13 16:22:29 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-13 16:22:38 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-13 23:45:46 Resource server started on port 8828
+2024-09-13 23:46:10 Resource server started on port 8828
+2024-09-13 23:46:39 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-14 14:51:31 Resource server started on port 8828
+2024-09-14 14:51:48 Resource server started on port 8828
+2024-09-14 14:56:32 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-14 16:07:20 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-15 16:57:30 Resource server started on port 8828
+2024-09-15 16:58:08 Resource server started on port 8828
+2024-09-15 16:58:56 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-15 18:50:47 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-15 18:50:59 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-15 19:04:40 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-16 10:53:41 Resource server started on port 8828
+2024-09-16 10:53:56 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-16 11:36:52 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-16 11:37:06 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-16 11:46:14 Resource server started on port 8829
+2024-09-16 13:51:41 Resource server started on port 8829
+2024-09-16 17:37:54 Creating PostgreSQL connection for 1725377009333/complisundev
+2024-09-16 19:26:47 Resource server started on port 8828
+2024-09-16 19:27:06 Resource server started on port 8828
+2024-09-16 20:31:05 Creating PostgreSQL connection for 1725377009333/complisundev_tree
+2024-09-17 11:14:55 Resource server started on port 8828
+2024-09-17 11:21:12 Creating PostgreSQL connection for 1725377009333/complisundev_tree
