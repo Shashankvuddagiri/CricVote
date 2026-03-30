@@ -1,0 +1,312 @@
+[
+  {
+    "id": "8602ad9d-1a5b-420b-b7df-b467e664e9f7",
+    "name": "Cyprus Women vs Greece Women, 6th T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 05, 12:30 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-05",
+    "dateTimeGMT": "2026-04-05T12:30:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "c800e51e-8959-46c9-9e14-6453f796b6e8",
+    "name": "Cyprus Women vs Greece Women, 5th T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 05, 08:15 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-05",
+    "dateTimeGMT": "2026-04-05T08:15:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "d6f88ba1-9c2b-4202-83d7-56d90b48216d",
+    "name": "Cyprus Women vs Greece Women, 4th T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 04, 12:30 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-04",
+    "dateTimeGMT": "2026-04-04T12:30:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "2cba4565-8c3c-46b8-bf50-ac1ff87e3245",
+    "name": "Cyprus Women vs Greece Women, 3rd T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 04, 08:15 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-04",
+    "dateTimeGMT": "2026-04-04T08:15:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "e98830bd-13e1-4227-8d16-1ae6b7f39372",
+    "name": "Cyprus Women vs Greece Women, 2nd T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 03, 12:30 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-03",
+    "dateTimeGMT": "2026-04-03T12:30:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "09119c4a-04b3-4ae7-9712-466a3eed6e1d",
+    "name": "Cyprus Women vs Greece Women, 1st T20I, Greece Women tour of Cyprus, 2026",
+    "matchType": "t20",
+    "status": "Match starts at Apr 03, 08:15 GMT",
+    "venue": "Happy Valley Ground, Episkopi",
+    "date": "2026-04-03",
+    "dateTimeGMT": "2026-04-03T08:15:00",
+    "teams": [
+      "Cyprus Women",
+      "Greece Women"
+    ],
+    "teamInfo": [
+      {
+        "name": "Cyprus Women",
+        "shortname": "CPW",
+        "img": "https://h.cricapi.com/img/icon512.png"
+      },
+      {
+        "name": "Greece Women",
+        "shortname": "GW",
+        "img": "https://g.cricapi.com/iapi/609-637873697911451014.webp?w=48"
+      }
+    ],
+    "series_id": "e9484293-8745-45c1-b57a-0567ea193d9b",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "26e41590-30d6-4699-bd85-3bc248dfa01e",
+    "name": "Namibia vs Scotland, 97th Match, ICC Cricket World Cup League Two 2023-27",
+    "matchType": "odi",
+    "status": "Match starts at Apr 12, 07:30 GMT",
+    "venue": "Wanderers Cricket Ground, Windhoek",
+    "date": "2026-04-12",
+    "dateTimeGMT": "2026-04-12T07:30:00",
+    "teams": [
+      "Namibia",
+      "Scotland"
+    ],
+    "teamInfo": [
+      {
+        "name": "Namibia",
+        "shortname": "NAM",
+        "img": "https://g.cricapi.com/iapi/53-637877082656229722.webp?w=48"
+      },
+      {
+        "name": "Scotland",
+        "shortname": "SCO",
+        "img": "https://g.cricapi.com/iapi/79-637877081763746652.webp?w=48"
+      }
+    ],
+    "series_id": "9963f971-4bb6-4d46-9dd8-879ed07f23ca",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "3c134b4c-bdc7-4cdb-92ad-a682b83886b4",
+    "name": "Namibia vs Oman, 96th Match, ICC Cricket World Cup League Two 2023-27",
+    "matchType": "odi",
+    "status": "Match starts at Apr 10, 07:30 GMT",
+    "venue": "Wanderers Cricket Ground, Windhoek",
+    "date": "2026-04-10",
+    "dateTimeGMT": "2026-04-10T07:30:00",
+    "teams": [
+      "Namibia",
+      "Oman"
+    ],
+    "teamInfo": [
+      {
+        "name": "Namibia",
+        "shortname": "NAM",
+        "img": "https://g.cricapi.com/iapi/53-637877082656229722.webp?w=48"
+      },
+      {
+        "name": "Oman",
+        "shortname": "OMAN",
+        "img": "https://g.cricapi.com/iapi/64-637877083212505394.webp?w=48"
+      }
+    ],
+    "series_id": "9963f971-4bb6-4d46-9dd8-879ed07f23ca",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "3855c9b2-312c-4e93-9cc9-51e6c7d25af1",
+    "name": "Scotland vs Oman, 95th Match, ICC Cricket World Cup League Two 2023-27",
+    "matchType": "odi",
+    "status": "Match starts at Apr 08, 07:30 GMT",
+    "venue": "Wanderers Cricket Ground, Windhoek",
+    "date": "2026-04-08",
+    "dateTimeGMT": "2026-04-08T07:30:00",
+    "teams": [
+      "Scotland",
+      "Oman"
+    ],
+    "teamInfo": [
+      {
+        "name": "Oman",
+        "shortname": "OMAN",
+        "img": "https://g.cricapi.com/iapi/64-637877083212505394.webp?w=48"
+      },
+      {
+        "name": "Scotland",
+        "shortname": "SCO",
+        "img": "https://g.cricapi.com/iapi/79-637877081763746652.webp?w=48"
+      }
+    ],
+    "series_id": "9963f971-4bb6-4d46-9dd8-879ed07f23ca",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  },
+  {
+    "id": "fee7ccb0-2e8d-4095-8708-ede0658d8197",
+    "name": "Namibia vs Scotland, 94th Match, ICC Cricket World Cup League Two 2023-27",
+    "matchType": "odi",
+    "status": "Match starts at Apr 06, 07:30 GMT",
+    "venue": "Wanderers Cricket Ground, Windhoek",
+    "date": "2026-04-06",
+    "dateTimeGMT": "2026-04-06T07:30:00",
+    "teams": [
+      "Namibia",
+      "Scotland"
+    ],
+    "teamInfo": [
+      {
+        "name": "Namibia",
+        "shortname": "NAM",
+        "img": "https://g.cricapi.com/iapi/53-637877082656229722.webp?w=48"
+      },
+      {
+        "name": "Scotland",
+        "shortname": "SCO",
+        "img": "https://g.cricapi.com/iapi/79-637877081763746652.webp?w=48"
+      }
+    ],
+    "series_id": "9963f971-4bb6-4d46-9dd8-879ed07f23ca",
+    "fantasyEnabled": false,
+    "bbbEnabled": false,
+    "hasSquad": false,
+    "matchStarted": false,
+    "matchEnded": false
+  }
+]
