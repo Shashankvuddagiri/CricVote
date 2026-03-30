@@ -34,17 +34,34 @@ module.exports = async function (req, res) {
         console.log(`Found ${predictions.documents.length} predictions.`);
 
         for (const pred of predictions.documents) {
+            const profile = await databases.getDocument(DATABASE_ID, PROFILES_ID, pred.userId);
+            let newPoints = profile.points || 0;
+            let newStreak = profile.streak || 0;
+            let newBadges = profile.badges || [];
+
             if (pred.predictedWinner === match.winner) {
-                console.log(`User ${pred.userId} guessed correctly! Awarding 10 points.`);
+                console.log(`User ${pred.userId} guessed correctly!`);
+                newPoints += 10;
+                newStreak += 1;
                 
-                // 2. Fetch the user's profile
-                const profile = await databases.getDocument(DATABASE_ID, PROFILES_ID, pred.userId);
-                
-                // 3. Increment points
-                await databases.updateDocument(DATABASE_ID, PROFILES_ID, pred.userId, {
-                    points: (profile.points || 0) + 10
-                });
+                // Award Badges
+                if (newStreak >= 5 && !newBadges.includes('👑 Prediction King')) {
+                    newBadges.push('👑 Prediction King');
+                }
+                if (newPoints >= 100 && !newBadges.includes('🏅 Veteran')) {
+                    newBadges.push('🏅 Veteran');
+                }
+            } else {
+                console.log(`User ${pred.userId} guessed incorrectly. Resetting streak.`);
+                newStreak = 0;
             }
+
+            // Update Profile
+            await databases.updateDocument(DATABASE_ID, PROFILES_ID, pred.userId, {
+                points: newPoints,
+                streak: newStreak,
+                badges: newBadges
+            });
         }
         res.json({ success: true, processed: predictions.documents.length });
     } catch (err) {

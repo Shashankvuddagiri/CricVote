@@ -30,38 +30,67 @@ module.exports = async function (context) {
     });
 
     log(`Processing ${iplMatches.length} matches...`);
+    const DEFAULT_LOGO = 'https://www.iplt20.com/assets/images/ipl-logo-new-old.png';
 
     for (const m of iplMatches) {
-      const teamA = m.teamInfo?.[0] || { name: 'TBA', shortname: 'TBA', img: '' };
-      const teamB = m.teamInfo?.[1] || { name: 'TBA', shortname: 'TBA', img: '' };
+      if (!m.id) continue;
+
+      // Robust Team Data Extraction
+      const teamA_raw = m.teamInfo?.[0] || {};
+      const teamB_raw = m.teamInfo?.[1] || {};
+
+      const getShort = (team, fallback) => {
+        if (team.shortname && team.shortname !== 'TBA') return team.shortname.toUpperCase();
+        if (team.name) return team.name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 3);
+        return fallback;
+      };
+
+      const teamA = {
+        name: teamA_raw.name || 'Team A',
+        shortname: getShort(teamA_raw, 'TMA'),
+        img: teamA_raw.img || DEFAULT_LOGO
+      };
+
+      const teamB = {
+        name: teamB_raw.name || 'Team B',
+        shortname: getShort(teamB_raw, 'TMB'),
+        img: teamB_raw.img || DEFAULT_LOGO
+      };
+
+      // Robust Status Mapping
+      let status = 'upcoming';
+      if (m.matchStarted || (m.status && m.status.toLowerCase().includes('live'))) {
+          status = 'live';
+      }
+      if (m.matchEnded || (m.status && m.status.toLowerCase().includes('won by'))) {
+          status = 'completed';
+      }
 
       try {
         // TRY CREATE
         await databases.createDocument(DATABASE_ID, MATCHES_ID, m.id, {
           teamA_name: teamA.name,
           teamA_short: teamA.shortname,
-          teamA_logo: teamA.img || '',
+          teamA_logo: teamA.img,
           teamB_name: teamB.name,
           teamB_short: teamB.shortname,
-          teamB_logo: teamB.img || '',
-          startTime: new Date(m.dateTimeGMT).toISOString(),
-          venue: m.venue || 'TBA',
-          status: (m.matchStarted || m.status.includes('live')) ? 'live' : 'upcoming',
+          teamB_logo: teamB.img,
+          startTime: m.dateTimeGMT ? new Date(m.dateTimeGMT).toISOString() : new Date().toISOString(),
+          venue: m.venue || 'TBA Arena',
+          status: status,
           votesA: 0,
           votesB: 0
         });
         log(`Created: ${m.name}`);
       } catch (e) {
-        // ONLY UPDATE if it's a conflict error (code 409)
         if (e.code === 409) {
+          // Update status if match info changes
           await databases.updateDocument(DATABASE_ID, MATCHES_ID, m.id, {
-            status: (m.matchStarted || m.status.includes('live')) ? 'live' : 'upcoming'
+            status: status
           });
-          log(`Updated: ${m.name}`);
+          log(`Updated Status: ${m.name} -> ${status}`);
         } else {
-          // IF it's NOT a conflict, it means your attributes are missing!
           error(`!! FAILED Document ${m.id}: ${e.message}`);
-          throw new Error(`Database Error: ${e.message}. Did you add the teamA_logo and teamB_logo attributes to the Match collection?`);
         }
       }
     }

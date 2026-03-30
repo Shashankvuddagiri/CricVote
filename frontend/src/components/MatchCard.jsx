@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { databases } from '../appwrite';
 import { ID, Query } from 'appwrite';
+import ShareCard from './ShareCard';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const PREDICTIONS_ID = import.meta.env.VITE_APPWRITE_PREDICTIONS_ID;
 const MATCHES_ID = import.meta.env.VITE_APPWRITE_MATCHES_ID;
 
-const MatchCard = ({ match, matchId, user }) => {
+const MatchCard = ({ match, matchId, user, profile }) => {
   const [timeRemaining, setTimeRemaining] = useState('');
-  const [voteStats, setVoteStats] = useState({ totalVotes: 0, aPct: 50, bPct: 50 });
+  const [voteStats, setVoteStats] = useState({ totalVotes: 0, votesA: 0, votesB: 0, aPct: 50, bPct: 50 });
   const [hasVoted, setHasVoted] = useState(null); 
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -39,6 +40,8 @@ const MatchCard = ({ match, matchId, user }) => {
       
       setVoteStats({
         totalVotes,
+        votesA: totalA,
+        votesB: totalB,
         aPct: totalVotes === 0 ? 50 : Math.round((totalA / totalVotes) * 100),
         bPct: totalVotes === 0 ? 50 : Math.round((totalB / totalVotes) * 100)
       });
@@ -161,10 +164,17 @@ const MatchCard = ({ match, matchId, user }) => {
           </div>
         </div>
 
+        {/* Community Pulse Section */}
+        <div className="w-full flex justify-between items-end mb-1 px-1">
+             <span className="text-[9px] font-black uppercase text-blue-400 tracking-tighter">{(voteStats.votesA || 0).toLocaleString()} Votes</span>
+             <span className="text-[10px] font-black italic uppercase text-white/40 tracking-widest">Arena Pulse</span>
+             <span className="text-[9px] font-black uppercase text-yellow-400 tracking-tighter">{(voteStats.votesB || 0).toLocaleString()} Votes</span>
+        </div>
+
         {/* Voting Progress Bar */}
-        <div className="w-full max-w-sm h-4 rounded-full bg-white/10 overflow-hidden mb-6 flex border border-white/10 shadow-inner">
-           <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500 shadow-xl" style={{width: `${voteStats.aPct}%`}}></div>
-           <div className="h-full bg-gradient-to-l from-yellow-500 to-orange-400 transition-all duration-500 shadow-xl" style={{width: `${voteStats.bPct}%`}}></div>
+        <div className="w-full max-w-sm h-3 rounded-full bg-white/5 overflow-hidden mb-6 flex border border-white/5 shadow-inner">
+           <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-1000 ease-out shadow-xl" style={{width: `${voteStats.aPct}%`}}></div>
+           <div className="h-full bg-gradient-to-l from-yellow-500 to-orange-400 transition-all duration-1000 ease-out shadow-xl" style={{width: `${voteStats.bPct}%`}}></div>
         </div>
 
         <div className="w-full">
@@ -181,6 +191,8 @@ const MatchCard = ({ match, matchId, user }) => {
                              Prediction Locked
                         </span>
                         {showSuccess && <span className="text-[10px] text-white/50 font-bold mt-1">Arena Intelligence Synchronized!</span>}
+                        
+                        <ShareCard match={match} prediction={hasVoted} username={profile?.username || user?.name || 'Warrior'} />
                     </div>
                 ) : (
                     <div className="flex gap-4 w-full">

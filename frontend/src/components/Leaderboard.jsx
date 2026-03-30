@@ -79,6 +79,16 @@ const Leaderboard = () => {
                 </div>
                 
                 <span className="font-bold text-sm md:text-lg truncate">{u.username}</span>
+                
+                {/* Badges Display */}
+                <div className="flex gap-1 overflow-x-auto no-scrollbar max-w-[100px] md:max-w-none">
+                     {u.badges && u.badges.map((badge, idx) => (
+                        <span key={idx} className="text-[7px] md:text-[9px] bg-white/10 px-1 py-0.5 rounded border border-white/20 whitespace-nowrap" title={badge}>
+                             {badge.split(' ')[0]}
+                        </span>
+                     ))}
+                </div>
+                
                 {i === 0 && <span className="text-[8px] md:text-[10px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded border border-yellow-500/50 uppercase font-black whitespace-nowrap">King</span>}
               </div>
               <span className="font-black text-yellow-400 tracking-tighter text-sm md:text-base ml-2">{u.points} PTS</span>

@@ -23,6 +23,39 @@ function MainApp() {
 
   const isAdmin = user && user.email === ADMIN_EMAIL;
 
+  // Intelligent Notification Logic
+  useEffect(() => {
+    if (!matches.length) return;
+
+    const checkLockTimes = () => {
+      const now = new Date();
+      matches.forEach(m => {
+        const startTime = new Date(m.startTime);
+        const diffMs = startTime - now;
+        const diffMins = Math.floor(diffMs / 1000 / 60);
+
+        // Notify if 15 minutes remains
+        if (diffMins === 15) {
+          if (Notification.permission === 'granted') {
+             new Notification('🏏 MML Prediction Alert!', {
+                body: `The arena for ${m.teamA_short} vs ${m.teamB_short} locks in 15 minutes! Lock in your verdict now.`,
+                icon: logo
+             });
+          }
+        }
+      });
+    };
+
+    const interval = setInterval(checkLockTimes, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [matches]);
+
+  const requestPermission = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission();
+    }
+  };
+
   useEffect(() => {
     if (!DATABASE_ID || !MATCHES_ID || DATABASE_ID === 'your_database_id') return;
 
@@ -79,12 +112,23 @@ function MainApp() {
               {view === 'admin' ? 'Exit Admin' : 'Admin'}
             </button>
           )}
-          <button
-            onClick={() => setView(view === 'leaderboard' ? 'home' : 'leaderboard')}
-            className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all text-[10px] md:text-xs font-bold uppercase backdrop-blur-sm border ${view === 'leaderboard' ? 'bg-white/20 border-white/30' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
-          >
-            Leaderboard
-          </button>
+            <button
+              onClick={() => setView(view === 'leaderboard' ? 'home' : 'leaderboard')}
+              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all text-[10px] md:text-xs font-bold uppercase backdrop-blur-sm border ${view === 'leaderboard' ? 'bg-white/20 border-white/30' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+            >
+              Leaderboard
+            </button>
+            
+            {/* Notification Toggle */}
+            {'Notification' in window && Notification.permission !== 'granted' && (
+                <button 
+                  onClick={requestPermission} 
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-yellow-400 hover:bg-white/10 transition group"
+                  title="Enable Alerts"
+                >
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-12 transition-transform"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </button>
+            )}
 
           {user ? (
             <div className="flex gap-2 md:gap-4 items-center bg-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-lg">
@@ -113,7 +157,7 @@ function MainApp() {
             </div>
           ) : (
             matches.map((match) => (
-              <MatchCard key={match.$id} matchId={match.$id} match={match} user={user} />
+              <MatchCard key={match.$id} matchId={match.$id} match={match} user={user} profile={profile} />
             ))
           )
         )}
