@@ -20,6 +20,20 @@ function MainApp() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [matches, setMatches] = useState([]);
   const [view, setView] = useState('home');
+  const [matchFilter, setMatchFilter] = useState('week'); // 'week', 'upcoming', 'history'
+  const [visibleDays, setVisibleDays] = useState(7);
+  const [logoMap, setLogoMap] = useState({
+    'CSK': 'https://documents.iplt20.com/ipl/CSK/logos/Logooutline/CSKoutline.png',
+    'MI': 'https://documents.iplt20.com/ipl/MI/Logos/Logooutline/MIoutline.png',
+    'RCB': 'https://documents.iplt20.com/ipl/RCB/Logos/Logooutline/RCBoutline.png',
+    'KKR': 'https://documents.iplt20.com/ipl/KKR/Logos/Logooutline/KKRoutline.png',
+    'GT': 'https://documents.iplt20.com/ipl/GT/Logos/Logooutline/GToutline.png',
+    'LSG': 'https://documents.iplt20.com/ipl/LSG/Logos/Logooutline/LSGoutline.png',
+    'DC': 'https://documents.iplt20.com/ipl/DC/Logos/LogoOutline/DCoutline.png',
+    'PBKS': 'https://documents.iplt20.com/ipl/PBKS/Logos/Logooutline/PBKSoutline.png',
+    'RR': 'https://documents.iplt20.com/ipl/RR/Logos/Logooutline/RRoutline.png',
+    'SRH': 'https://documents.iplt20.com/ipl/SRH/Logos/Logooutline/SRHoutline.png'
+  });
 
   const isAdmin = user && user.email === ADMIN_EMAIL;
 
@@ -60,20 +74,29 @@ function MainApp() {
     if (!DATABASE_ID || !MATCHES_ID || DATABASE_ID === 'your_database_id') return;
 
     // Fetch Initial Matches
-    const fetchMatches = async () => {
+    // Fetch Initial Matches and Logos
+    const fetchArenaData = async () => {
       try {
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          MATCHES_ID,
-          [Query.equal('status', ['upcoming', 'live']), Query.orderAsc('startTime')]
-        );
-        setMatches(response.documents);
+        const LOGOS_ID = import.meta.env.VITE_APPWRITE_LOGOS_ID || 'logos';
+        const [matchRes, logoRes] = await Promise.all([
+          databases.listDocuments(DATABASE_ID, MATCHES_ID, [Query.orderAsc('startTime'), Query.limit(100)]),
+          databases.listDocuments(DATABASE_ID, LOGOS_ID).catch(() => ({ documents: [] }))
+        ]);
+        
+        setMatches(matchRes.documents);
+        
+        // Build Logo Map with local fallbacks
+        const lMap = { ...logoMap };
+        logoRes.documents.forEach(l => {
+          lMap[l.teamShort] = l.logoUrl;
+        });
+        setLogoMap(lMap);
       } catch (err) {
         console.error("Match fetch failed", err);
       }
     };
 
-    fetchMatches();
+    fetchArenaData();
 
     // Subscribe to real-time updates for Matches
     const unsubscribe = client.subscribe(
@@ -144,22 +167,87 @@ function MainApp() {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col items-center gap-8">
+      <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col items-center gap-8 pb-20">
+        
+        {view === 'home' && (
+          <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 self-center">
+             {[
+               { id: 'week', label: 'This Week' },
+               { id: 'upcoming', label: 'All Upcoming' },
+               { id: 'history', label: 'History' }
+             ].map(f => (
+               <button
+                 key={f.id}
+                 onClick={() => setMatchFilter(f.id)}
+                 className={`px-4 py-2 rounded-xl text-[10px] md:text-xs font-black uppercase transition-all tracking-wider ${matchFilter === f.id ? 'bg-indigo-600 text-white shadow-lg' : 'text-white/40 hover:text-white/60'}`}
+               >
+                 {f.label}
+               </button>
+             ))}
+          </div>
+        )}
 
         {view === 'admin' && isAdmin ? (
           <AdminDashboard />
         ) : view === 'leaderboard' ? (
           <Leaderboard />
         ) : (
-          matches.length === 0 ? (
-            <div className="text-indigo-200 uppercase tracking-widest font-black text-xs italic opacity-50 py-20 text-center">
-              No active matches in the arena.<br />Check back soon!
-            </div>
-          ) : (
-            matches.map((match) => (
-              <MatchCard key={match.$id} matchId={match.$id} match={match} user={user} profile={profile} />
-            ))
-          )
+          (() => {
+            const now = new Date();
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1));
+            startOfWeek.setHours(0,0,0,0);
+            
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            endOfWeek.setHours(23,59,59,999);
+
+            const filtered = matches.filter(m => {
+              const mDate = new Date(m.startTime);
+              if (matchFilter === 'week') {
+                const limit = new Date(now);
+                limit.setDate(now.getDate() + visibleDays);
+                return mDate >= now && mDate <= limit && m.status !== 'completed';
+              }
+              if (matchFilter === 'upcoming') {
+                return m.status !== 'completed';
+              }
+              if (matchFilter === 'history') {
+                return m.status === 'completed';
+              }
+              return true;
+            });
+
+            return (
+              <div className="w-full flex flex-col items-center gap-8">
+                {filtered.length === 0 ? (
+                  <div className="text-indigo-200 uppercase tracking-widest font-black text-xs italic opacity-50 py-20 text-center">
+                    No matches found in this sector.<br />Try another filter!
+                  </div>
+                ) : (
+                  filtered.map((match) => (
+                    <MatchCard 
+                      key={match.$id} 
+                      matchId={match.$id} 
+                      match={match} 
+                      user={user} 
+                      profile={profile} 
+                      logoMap={logoMap}
+                    />
+                  ))
+                )}
+                
+                {matchFilter === 'week' && filtered.length > 0 && filtered.length < matches.filter(m => m.status !== 'completed' && new Date(m.startTime) >= now).length && (
+                  <button 
+                    onClick={() => setVisibleDays(prev => prev + 7)}
+                    className="mt-4 px-8 py-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 text-[10px] font-black uppercase tracking-widest transition-all"
+                  >
+                    Load Next Phase +7 Days
+                  </button>
+                )}
+              </div>
+            );
+          })()
         )}
 
       </main>

@@ -15,21 +15,36 @@ module.exports = async function (context) {
 
   try {
     const CRIC_API_KEY = '16c49e68-3f07-4766-b5b4-b189307f86f0';
-    const response = await axios.get(`https://api.cricapi.com/v1/matches`, {
-      params: { apikey: CRIC_API_KEY, offset: 0, search: 'IPL' }
+    
+    // 1. Find the Series ID for IPL 2026
+    log("Searching for IPL 2026 Series ID...");
+    const seriesResp = await axios.get(`https://api.cricapi.com/v1/series`, {
+      params: { apikey: CRIC_API_KEY, offset: 0, search: 'Indian Premier League 2026' }
     });
 
-    const matches = response.data.data;
-    const iplMatches = matches.filter(m => {
-      const name = (m.name || '').toLowerCase();
-      const series = (m.series || '').toLowerCase();
+    const iplSeries = seriesResp.data.data.find(s => 
+      s.name.toLowerCase().includes('indian premier league 2026')
+    );
 
-      // STRICT FILTER: Only "Indian Premier League" or "IPL"
-      return name.includes('indian premier league') || series.includes('indian premier league') ||
-        name.includes('ipl') || series.includes('ipl');
+    if (!iplSeries) {
+      throw new Error("Could not find Indian Premier League 2026 series in CricAPI.");
+    }
+
+    const SERIES_ID = iplSeries.id;
+    log(`Found Series ID: ${SERIES_ID} (${iplSeries.name})`);
+
+    // 2. Fetch ALL matches for this series
+    const infoResp = await axios.get(`https://api.cricapi.com/v1/series_info`, {
+      params: { apikey: CRIC_API_KEY, id: SERIES_ID }
     });
 
-    log(`Processing ${iplMatches.length} matches...`);
+    if (!infoResp.data.data || !infoResp.data.data.matchList) {
+       throw new Error("Failed to fetch match list for series: " + SERIES_ID);
+    }
+
+    const iplMatches = infoResp.data.data.matchList;
+    log(`Processing ${iplMatches.length} total matches for the season...`);
+    
     const DEFAULT_LOGO = 'https://www.iplt20.com/assets/images/ipl-logo-new-old.png';
 
     for (const m of iplMatches) {
@@ -95,7 +110,7 @@ module.exports = async function (context) {
       }
     }
 
-    return res.json({ success: true, count: iplMatches.length });
+    return res.json({ success: true, count: iplMatches.length, series: iplSeries.name });
 
   } catch (err) {
     error("Execution Failed: " + err.message);

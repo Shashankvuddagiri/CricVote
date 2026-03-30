@@ -7,7 +7,8 @@ const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const PREDICTIONS_ID = import.meta.env.VITE_APPWRITE_PREDICTIONS_ID;
 const MATCHES_ID = import.meta.env.VITE_APPWRITE_MATCHES_ID;
 
-const MatchCard = ({ match, matchId, user, profile }) => {
+const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
+  const DEFAULT_LOGO = 'https://www.iplt20.com/assets/images/ipl-logo-new-old.png';
   const [timeRemaining, setTimeRemaining] = useState('');
   const [voteStats, setVoteStats] = useState({ totalVotes: 0, votesA: 0, votesB: 0, aPct: 50, bPct: 50 });
   const [hasVoted, setHasVoted] = useState(null); 
@@ -110,9 +111,17 @@ const MatchCard = ({ match, matchId, user, profile }) => {
   const isStarted = startTime <= now;
   const isCompleted = match.status === 'completed';
   const isLocked = !isMatchToday || isStarted || isCompleted;
+  const winner = match.winner; // This would be set by Admin in the dashboard
+
+  const isToday = isMatchToday;
 
   return (
-    <div className="w-full max-w-2xl bg-white/10 rounded-3xl p-1 backdrop-blur-md border border-white/20 shadow-2xl relative overflow-hidden group">
+    <div className={`w-full max-w-2xl ${isToday ? 'bg-indigo-900/40 border-yellow-400/30 shadow-yellow-400/5' : 'bg-white/10 border-white/20'} rounded-3xl p-1 backdrop-blur-md border shadow-2xl relative overflow-hidden group transition-all duration-500`}>
+      {isToday && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-yellow-400 text-black px-6 py-1 rounded-b-xl font-black text-[9px] uppercase tracking-widest shadow-lg z-30 animate-pulse">
+            🔥 Match of the Day
+        </div>
+      )}
       <div className="absolute top-0 right-0 p-4 z-20">
         <span className={`${isLocked ? 'bg-gray-600' : 'bg-red-500 animate-pulse'} text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg`}>
           {isCompleted ? 'Completed' : isStarted ? 'Live' : isMatchToday ? 'Today' : 'Upcoming'}
@@ -124,17 +133,27 @@ const MatchCard = ({ match, matchId, user, profile }) => {
         <h2 className="text-lg md:text-2xl font-bold mb-6 md:mb-8 px-4">{match.teamA_name} vs {match.teamB_name}</h2>
 
         <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-md mx-auto mb-8 md:mb-10 gap-6 md:gap-0">
-          <div className="flex flex-row md:flex-col items-center flex-1 gap-4 md:gap-0">
-            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamA' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
-              {match.teamA_logo ? (
-                <img src={match.teamA_logo} alt={match.teamA_name} className="w-full h-full object-contain p-2" />
-              ) : (
-                <span className="text-xl md:text-2xl font-black text-white">{match.teamA_short}</span>
-              )}
+          <div className="flex flex-row md:flex-col items-center flex-1 gap-4 md:gap-0 relative group">
+            {hasVoted === 'teamA' && (
+              <div className="absolute -top-2 -left-2 z-10 bg-yellow-400 text-black w-6 h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-indigo-900 animate-in zoom-in duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            )}
+            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition-all duration-500 overflow-hidden ${hasVoted === 'teamA' ? 'border-yellow-400 bg-yellow-400/10 scale-110 shadow-yellow-400/40 ring-4 ring-yellow-400/20' : 'border-white bg-indigo-700/50 grayscale-[0.5] opacity-60'}`}>
+              <img 
+                src={logoMap[match.teamA_short] || match.teamA_logo || DEFAULT_LOGO} 
+                alt={match.teamA_short} 
+                onError={(e) => { e.target.src = match.teamA_logo || DEFAULT_LOGO; }}
+                className="w-full h-full object-contain p-2" 
+              />
             </div>
-            <div className="text-left md:text-center">
-              <span className="block font-bold text-base md:text-lg text-white">{match.teamA_short}</span>
-              <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.aPct}%</span>
+            <div className="text-left md:text-center mt-2">
+              <span className={`block font-black text-lg md:text-xl italic transition-colors ${hasVoted === 'teamA' ? 'text-yellow-400' : 'text-white'}`}>{match.teamA_short}</span>
+              {hasVoted === 'teamA' ? (
+                <span className="inline-block font-black text-[8px] bg-yellow-400 text-black px-2 py-0.5 rounded-full uppercase tracking-tighter mt-1">Your Selection</span>
+              ) : (
+                <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.aPct}%</span>
+              )}
             </div>
           </div>
 
@@ -149,17 +168,27 @@ const MatchCard = ({ match, matchId, user, profile }) => {
             )}
           </div>
 
-          <div className="flex flex-row-reverse md:flex-col items-center flex-1 gap-4 md:gap-0">
-            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition duration-300 overflow-hidden ${hasVoted === 'teamB' ? 'border-yellow-400 bg-white/20' : 'border-white bg-indigo-700/50'}`}>
-              {match.teamB_logo ? (
-                <img src={match.teamB_logo} alt={match.teamB_name} className="w-full h-full object-contain p-2" />
-              ) : (
-                <span className="text-xl md:text-2xl font-black text-white">{match.teamB_short}</span>
-              )}
+          <div className="flex flex-row-reverse md:flex-col items-center flex-1 gap-4 md:gap-0 relative group">
+            {hasVoted === 'teamB' && (
+              <div className="absolute -top-2 -right-2 z-10 bg-yellow-400 text-black w-6 h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-indigo-900 animate-in zoom-in duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            )}
+            <div className={`w-20 h-20 md:w-28 md:h-28 rounded-full border-4 shadow-lg flex items-center justify-center mb-0 md:mb-3 transition-all duration-500 overflow-hidden ${hasVoted === 'teamB' ? 'border-yellow-400 bg-yellow-400/10 scale-110 shadow-yellow-400/40 ring-4 ring-yellow-400/20' : 'border-white bg-indigo-700/50 grayscale-[0.5] opacity-60'}`}>
+              <img 
+                src={logoMap[match.teamB_short] || match.teamB_logo || DEFAULT_LOGO} 
+                alt={match.teamB_short} 
+                onError={(e) => { e.target.src = match.teamB_logo || DEFAULT_LOGO; }}
+                className="w-full h-full object-contain p-2" 
+              />
             </div>
-            <div className="text-right md:text-center">
-               <span className="block font-bold text-base md:text-lg text-white">{match.teamB_short}</span>
-               <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.bPct}%</span>
+            <div className="text-right md:text-center mt-2">
+               <span className={`block font-black text-lg md:text-xl italic transition-colors ${hasVoted === 'teamB' ? 'text-yellow-400' : 'text-white'}`}>{match.teamB_short}</span>
+               {hasVoted === 'teamB' ? (
+                 <span className="inline-block font-black text-[8px] bg-yellow-400 text-black px-2 py-0.5 rounded-full uppercase tracking-tighter mt-1">Your Selection</span>
+               ) : (
+                 <span className="block font-bold text-xs md:text-sm text-indigo-300">{voteStats.bPct}%</span>
+               )}
             </div>
           </div>
         </div>
