@@ -1,7 +1,12 @@
 node_modules/
 .env
 appwrite_function.env
+# Archives
+*.zip
+*.tar
+*.tar.gz
 syncIPLMatches.tar.gz
+functions_deploy.tar.gz
 *.json
 *.txt
 .DS_Store

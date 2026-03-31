@@ -171,26 +171,36 @@ module.exports = async function (context) {
           const { Query } = require('node-appwrite');
           const winnersRes = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [
             Query.equal('matchId', m.id),
-            Query.equal('team', winnerId)
+            Query.equal('predictedWinner', winnerId)
           ]);
 
           log(`Found ${winnersRes.total} winners to reward!`);
 
           for (const pred of winnersRes.documents) {
             try {
-              // Find the user profile by username
-              const userRes = await databases.listDocuments(DATABASE_ID, PROFILES_ID, [
-                Query.equal('username', pred.username)
-              ]);
+              // Get the profile by userId directly (assuming profile ID == user ID)
+              // If not, we use listDocuments with Query.equal('userId', pred.userId)
+              const profile = await databases.getDocument(DATABASE_ID, PROFILES_ID, pred.userId);
               
-              if (userRes.total > 0) {
-                const profile = userRes.documents[0];
+              if (profile) {
                 await databases.updateDocument(DATABASE_ID, PROFILES_ID, profile.$id, {
                   points: (profile.points || 0) + 1
                 });
               }
             } catch (err) {
-              error(`- Distribution error for ${pred.username}: ${err.message}`);
+              // Fallback for custom profile IDs
+              try {
+                const userRes = await databases.listDocuments(DATABASE_ID, PROFILES_ID, [
+                  Query.equal('userId', pred.userId)
+                ]);
+                if (userRes.total > 0) {
+                   await databases.updateDocument(DATABASE_ID, PROFILES_ID, userRes.documents[0].$id, {
+                     points: (userRes.documents[0].points || 0) + 1
+                   });
+                }
+              } catch (fallbackErr) {
+                 error(`- Distribution error for user ${pred.userId}: ${fallbackErr.message}`);
+              }
             }
           }
 

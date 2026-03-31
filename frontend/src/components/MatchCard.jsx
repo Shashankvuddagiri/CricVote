@@ -13,6 +13,8 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
   const [voteStats, setVoteStats] = useState({ totalVotes: 0, votesA: 0, votesB: 0, aPct: 50, bPct: 50 });
   const [hasVoted, setHasVoted] = useState(null); 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showWarriors, setShowWarriors] = useState(false);
+  const [warriors, setWarriors] = useState({ teamA: [], teamB: [] });
 
   useEffect(() => {
     // Check if user already voted in Phase 2
@@ -78,6 +80,7 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
         ID.unique(),
         {
           userId: user.$id,
+          username: profile?.username || user.name || 'Anonymous Warrior',
           matchId: matchId,
           predictedWinner: team
         }
@@ -207,6 +210,49 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
         </div>
 
         <div className="w-full">
+          {isCompleted && (
+            <div className="w-full mb-6">
+                <button 
+                  onClick={async () => {
+                    if (!showWarriors) {
+                        try {
+                            const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [matchId])]);
+                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username);
+                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username);
+                            setWarriors({ teamA: a, teamB: b });
+                        } catch (err) { console.error(err); }
+                    }
+                    setShowWarriors(!showWarriors);
+                  }}
+                  className="w-full py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-indigo-300 hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    {showWarriors ? 'Conceal Warriors' : 'See the Warriors'}
+                </button>
+                
+                {showWarriors && (
+                    <div className="mt-4 grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
+                        <div className="bg-blue-600/10 border border-blue-500/20 p-3 rounded-2xl">
+                            <h4 className="text-[8px] font-black uppercase text-blue-400 mb-2 border-b border-blue-500/10 pb-1">The {match.teamA_short} Battalion</h4>
+                            <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
+                                {warriors.teamA.length > 0 ? warriors.teamA.map((w, idx) => (
+                                    <span key={idx} className="text-[10px] font-bold text-white/50 truncate">⚔️ {w}</span>
+                                )) : <span className="text-[8px] text-white/20 italic">No warriors signed</span>}
+                            </div>
+                        </div>
+                        <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-2xl">
+                             <h4 className="text-[8px] font-black uppercase text-yellow-400 mb-2 border-b border-yellow-500/10 pb-1">The {match.teamB_short} Legion</h4>
+                             <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
+                                {warriors.teamB.length > 0 ? warriors.teamB.map((w, idx) => (
+                                    <span key={idx} className="text-[10px] font-bold text-white/50 truncate">🛡️ {w}</span>
+                                )) : <span className="text-[8px] text-white/20 italic">No warriors signed</span>}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+          )}
+
           {!isMatchToday && !isCompleted ? (
               <div className="py-4 bg-white/5 border border-white/10 rounded-xl text-indigo-200 font-bold uppercase tracking-widest text-sm italic">
                   Voting opens on {startTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
@@ -221,6 +267,16 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
                         </span>
                         {showSuccess && <span className="text-[10px] text-white/50 font-bold mt-1">Arena Intelligence Synchronized!</span>}
                         
+                        <div className="mt-4 px-3 py-1 bg-white/10 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-tighter text-indigo-100 flex items-center gap-2 mb-2">
+                            <span>Predicted Winner: </span>
+                            <span className={hasVoted === 'teamA' ? 'text-blue-400' : 'text-yellow-400'}>{hasVoted === 'teamA' ? match.teamA_short : match.teamB_short}</span>
+                            {isCompleted && (
+                                <span className={`ml-2 px-1.5 rounded transition ${match.winner === hasVoted ? 'bg-yellow-400 text-black shadow-lg shadow-yellow-400/20' : 'bg-red-500 text-white'}`}>
+                                    {match.winner === hasVoted ? '+1 GOLD' : 'DEFEAT'}
+                                </span>
+                            )}
+                        </div>
+
                         <ShareCard match={match} prediction={hasVoted} username={profile?.username || user?.name || 'Warrior'} />
                     </div>
                 ) : (

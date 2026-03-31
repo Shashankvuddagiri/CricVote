@@ -13,6 +13,8 @@ const AdminDashboard = () => {
     const [filter, setFilter] = useState('all');
     const [adminView, setAdminView] = useState('matches'); // 'matches', 'players', 'logos'
     const [logos, setLogos] = useState([]);
+    const [showWarriors, setShowWarriors] = useState({}); // matchId -> boolean
+    const [warriorsByMatch, setWarriorsByMatch] = useState({}); // matchId -> {teamA: [], teamB: []}
     const [newLogo, setNewLogo] = useState({ teamShort: '', logoUrl: '' });
     
     // Form State
@@ -251,7 +253,7 @@ const AdminDashboard = () => {
                 const { Query } = await import('appwrite');
                 const predRes = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [
                     Query.equal('matchId', matchId),
-                    Query.equal('team', winner)
+                    Query.equal('predictedWinner', winner)
                 ]);
 
                 console.log(`Found ${predRes.total} winners to reward!`);
@@ -259,14 +261,14 @@ const AdminDashboard = () => {
                 // Iterate and award points (Manual loop for safety)
                 for (const pred of predRes.documents) {
                     try {
-                        const userProfile = profiles.find(p => p.username === pred.username);
+                        const userProfile = profiles.find(p => p.$id === pred.userId);
                         if (userProfile) {
                             await databases.updateDocument(DATABASE_ID, PROFILES_ID, userProfile.$id, {
                                 points: (userProfile.points || 0) + 1
                             });
                         }
                     } catch (pErr) {
-                        console.error(`Failed to reward ${pred.username}:`, pErr);
+                        console.error(`Failed to reward ${pred.userId}:`, pErr);
                     }
                 }
                 alert(`Victory Points distributed to ${predRes.total} warriors!`);
@@ -405,6 +407,39 @@ const AdminDashboard = () => {
                                                Referee Points Deployed 🛡️
                                             </div>
                                         )}
+                                        
+                                        <div className="mt-4 border-t border-white/5 pt-4">
+                                            <button 
+                                                onClick={async () => {
+                                                    const PREDICTIONS_ID = import.meta.env.VITE_APPWRITE_PREDICTIONS_ID;
+                                                    if (!showWarriors[m.$id]) {
+                                                        try {
+                                                            const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [m.$id])]);
+                                                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || 'Unknown');
+                                                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || 'Unknown');
+                                                            setWarriorsByMatch(prev => ({ ...prev, [m.$id]: { teamA: a, teamB: b } }));
+                                                        } catch (err) { console.error(err); }
+                                                    }
+                                                    setShowWarriors(prev => ({ ...prev, [m.$id]: !prev[m.$id] }));
+                                                }}
+                                                className="text-[9px] font-black uppercase text-indigo-400 hover:text-indigo-300 transition"
+                                            >
+                                                {showWarriors[m.$id] ? 'Hide Voter List' : 'View Voter List (Arena Pulse)'}
+                                            </button>
+                                            
+                                            {showWarriors[m.$id] && warriorsByMatch[m.$id] && (
+                                                <div className="mt-3 grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
+                                                    <div className="text-[10px] space-y-1">
+                                                        <p className="font-black text-blue-400 uppercase text-[8px] border-b border-blue-400/20 pb-1 mb-1">{m.teamA_short} Battalion</p>
+                                                        {warriorsByMatch[m.$id].teamA.map((w, i) => <p key={i} className="text-white/40 truncate">⚔️ {w}</p>)}
+                                                    </div>
+                                                    <div className="text-[10px] space-y-1">
+                                                        <p className="font-black text-yellow-500 uppercase text-[8px] border-b border-yellow-500/20 pb-1 mb-1">{m.teamB_short} Legion</p>
+                                                        {warriorsByMatch[m.$id].teamB.map((w, i) => <p key={i} className="text-white/40 truncate">🛡️ {w}</p>)}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     
                                     <div className="flex flex-wrap justify-center gap-2">

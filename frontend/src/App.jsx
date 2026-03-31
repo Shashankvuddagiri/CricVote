@@ -132,15 +132,15 @@ function MainApp() {
               onClick={() => setView(view === 'admin' ? 'home' : 'admin')}
               className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-black uppercase text-[9px] md:text-[10px] border tracking-widest transition-all ${view === 'admin' ? 'bg-red-500 text-white border-red-500 shadow-lg shadow-red-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
             >
-              {view === 'admin' ? 'Exit Admin' : 'Admin'}
+              {view === 'admin' ? 'Exit Admin' : 'Admin Area'}
             </button>
           )}
-            <button
-              onClick={() => setView(view === 'leaderboard' ? 'home' : 'leaderboard')}
-              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all text-[10px] md:text-xs font-bold uppercase backdrop-blur-sm border ${view === 'leaderboard' ? 'bg-white/20 border-white/30' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
-            >
-              Leaderboard
-            </button>
+
+          <div className="flex bg-black/20 p-1 rounded-full border border-white/5 mx-2">
+              <button onClick={() => setView('home')} className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-black uppercase transition-all tracking-widest ${view === 'home' ? 'bg-indigo-600 text-white shadow-lg' : 'text-white/40 hover:text-white/60'}`}>Arena</button>
+              <button onClick={() => setView('history')} className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-black uppercase transition-all tracking-widest ${view === 'history' ? 'bg-indigo-600 text-white shadow-lg' : 'text-white/40 hover:text-white/60'}`}>History</button>
+              <button onClick={() => setView('leaderboard')} className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-black uppercase transition-all tracking-widest ${view === 'leaderboard' ? 'bg-indigo-600 text-white shadow-lg' : 'text-white/40 hover:text-white/60'}`}>Ranks</button>
+          </div>
             
             {/* Notification Toggle */}
             {'Notification' in window && Notification.permission !== 'granted' && (
@@ -191,6 +191,24 @@ function MainApp() {
           <AdminDashboard />
         ) : view === 'leaderboard' ? (
           <Leaderboard />
+        ) : view === 'history' ? (
+          <div className="w-full flex flex-col items-center gap-8">
+              <h2 className="text-2xl font-black italic uppercase text-indigo-300 tracking-widest border-b-2 border-indigo-500/30 pb-2">Your Prediction History</h2>
+              {matches.filter(m => m.status === 'completed').length === 0 ? (
+                  <div className="py-20 text-white/20 font-black uppercase text-xs italic tracking-widest">No completed matches in history archives.</div>
+              ) : (
+                  matches.filter(m => m.status === 'completed').map(match => (
+                    <MatchCard 
+                      key={match.$id} 
+                      matchId={match.$id} 
+                      match={match} 
+                      user={user} 
+                      profile={profile} 
+                      logoMap={logoMap}
+                    />
+                  ))
+              )}
+          </div>
         ) : (
           (() => {
             const now = new Date();
