@@ -23,16 +23,16 @@ function MainApp() {
   const [matchFilter, setMatchFilter] = useState('week'); // 'week', 'upcoming', 'history'
   const [visibleDays, setVisibleDays] = useState(7);
   const [logoMap, setLogoMap] = useState({
-    'CSK': 'https://documents.iplt20.com/ipl/CSK/logos/Logooutline/CSKoutline.png',
-    'MI': 'https://documents.iplt20.com/ipl/MI/Logos/Logooutline/MIoutline.png',
-    'RCB': 'https://documents.iplt20.com/ipl/RCB/Logos/Logooutline/RCBoutline.png',
-    'KKR': 'https://documents.iplt20.com/ipl/KKR/Logos/Logooutline/KKRoutline.png',
-    'GT': 'https://documents.iplt20.com/ipl/GT/Logos/Logooutline/GToutline.png',
-    'LSG': 'https://documents.iplt20.com/ipl/LSG/Logos/Logooutline/LSGoutline.png',
-    'DC': 'https://documents.iplt20.com/ipl/DC/Logos/LogoOutline/DCoutline.png',
-    'PBKS': 'https://documents.iplt20.com/ipl/PBKS/Logos/Logooutline/PBKSoutline.png',
-    'RR': 'https://documents.iplt20.com/ipl/RR/Logos/Logooutline/RRoutline.png',
-    'SRH': 'https://documents.iplt20.com/ipl/SRH/Logos/Logooutline/SRHoutline.png'
+    'CSK': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/CSK.png',
+    'MI': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/MI.png',
+    'RCB': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/RCB.png',
+    'KKR': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/KKR.png',
+    'DC': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/DC.png',
+    'PBKS': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/PBKS.png',
+    'RR': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/RR.png',
+    'GT': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/GT.png',
+    'LSG': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/LSG.png',
+    'SRH': 'https://documents.iplt20.com/ipl/IPLHeadshot2024/SRH.png'
   });
 
   const isAdmin = user && user.email === ADMIN_EMAIL;

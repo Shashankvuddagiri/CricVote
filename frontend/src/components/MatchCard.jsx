@@ -217,9 +217,10 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
                     if (!showWarriors) {
                         try {
                             const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [matchId])]);
-                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
-                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
-                            setWarriors({ teamA: a, teamB: b });
+                            // Deduplicate: Show each username only once
+                            const uniqueA = [...new Set(res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || `Warrior #${d.$id.slice(-4)}`))];
+                            const uniqueB = [...new Set(res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || `Warrior #${d.$id.slice(-4)}`))];
+                            setWarriors({ teamA: uniqueA, teamB: uniqueB });
                         } catch (err) { console.error(err); }
                     }
                     setShowWarriors(!showWarriors);
@@ -236,19 +237,19 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
                             <h4 className="text-[8px] font-black uppercase text-blue-400 mb-2 border-b border-blue-500/10 pb-1">The {match.teamA_short} Battalion</h4>
                             <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
                                 {warriors.teamA.length > 0 ? warriors.teamA.map((w, idx) => (
-                                    <span key={idx} className="text-[10px] font-bold text-white/50 truncate">⚔️ {w}</span>
+                                    <span key={idx} className="text-[10px] font-bold text-indigo-100/90 truncate">⚔️ {w}</span>
                                 )) : <span className="text-[8px] text-white/20 italic">No warriors signed</span>}
                             </div>
                         </div>
-                        <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-2xl">
-                             <h4 className="text-[8px] font-black uppercase text-yellow-400 mb-2 border-b border-yellow-500/10 pb-1">The {match.teamB_short} Legion</h4>
-                             <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
-                                {warriors.teamB.length > 0 ? warriors.teamB.map((w, idx) => (
-                                    <span key={idx} className="text-[10px] font-bold text-white/50 truncate">🛡️ {w}</span>
-                                )) : <span className="text-[8px] text-white/20 italic">No warriors signed</span>}
-                            </div>
-                        </div>
-                    </div>
+                         <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-2xl">
+                              <h4 className="text-[8px] font-black uppercase text-yellow-400 mb-2 border-b border-yellow-500/10 pb-1">The {match.teamB_short} Legion</h4>
+                              <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
+                                 {warriors.teamB.length > 0 ? warriors.teamB.map((w, idx) => (
+                                     <span key={idx} className="text-[10px] font-bold text-indigo-100/90 truncate">🛡️ {w}</span>
+                                 )) : <span className="text-[8px] text-white/20 italic">No warriors signed</span>}
+                             </div>
+                         </div>
+                     </div>
                 )}
             </div>
           )}
