@@ -415,8 +415,8 @@ const AdminDashboard = () => {
                                                     if (!showWarriors[m.$id]) {
                                                         try {
                                                             const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [m.$id])]);
-                                                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || 'Unknown');
-                                                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || 'Unknown');
+                                                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
+                                                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
                                                             setWarriorsByMatch(prev => ({ ...prev, [m.$id]: { teamA: a, teamB: b } }));
                                                         } catch (err) { console.error(err); }
                                                     }
@@ -428,15 +428,55 @@ const AdminDashboard = () => {
                                             </button>
                                             
                                             {showWarriors[m.$id] && warriorsByMatch[m.$id] && (
-                                                <div className="mt-3 grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
-                                                    <div className="text-[10px] space-y-1">
-                                                        <p className="font-black text-blue-400 uppercase text-[8px] border-b border-blue-400/20 pb-1 mb-1">{m.teamA_short} Battalion</p>
-                                                        {warriorsByMatch[m.$id].teamA.map((w, i) => <p key={i} className="text-white/40 truncate">⚔️ {w}</p>)}
+                                                <div className="mt-3 space-y-4 animate-in slide-in-from-top-2 duration-300">
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="text-[10px] space-y-1">
+                                                            <p className="font-black text-blue-400 uppercase text-[8px] border-b border-blue-400/20 pb-1 mb-1">{m.teamA_short} Battalion</p>
+                                                            {warriorsByMatch[m.$id].teamA.map((w, i) => <p key={i} className="text-white/40 truncate">⚔️ {w}</p>)}
+                                                        </div>
+                                                        <div className="text-[10px] space-y-1">
+                                                            <p className="font-black text-yellow-500 uppercase text-[8px] border-b border-yellow-500/20 pb-1 mb-1">{m.teamB_short} Legion</p>
+                                                            {warriorsByMatch[m.$id].teamB.map((w, i) => <p key={i} className="text-white/40 truncate">🛡️ {w}</p>)}
+                                                        </div>
                                                     </div>
-                                                    <div className="text-[10px] space-y-1">
-                                                        <p className="font-black text-yellow-500 uppercase text-[8px] border-b border-yellow-500/20 pb-1 mb-1">{m.teamB_short} Legion</p>
-                                                        {warriorsByMatch[m.$id].teamB.map((w, i) => <p key={i} className="text-white/40 truncate">🛡️ {w}</p>)}
-                                                    </div>
+                                                    
+                                                    {/* The Purge Utility */}
+                                                    <button 
+                                                        disabled={updating === m.$id}
+                                                        onClick={async () => {
+                                                            if (!window.confirm("Purge all Anonymous/Legacy votes and re-sync counts?")) return;
+                                                            setUpdating(m.$id);
+                                                            try {
+                                                                const PREDICTIONS_ID = import.meta.env.VITE_APPWRITE_PREDICTIONS_ID;
+                                                                // 1. Fetch ALL for this match
+                                                                const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [m.$id])]);
+                                                                
+                                                                // 2. Identify and Delete anonymous ones
+                                                                const toPurge = res.documents.filter(d => !d.username);
+                                                                for (const doc of toPurge) {
+                                                                    await databases.deleteDocument(DATABASE_ID, PREDICTIONS_ID, doc.$id);
+                                                                }
+                                                                
+                                                                // 3. Re-calculate survived counts
+                                                                const survivors = res.documents.filter(d => d.username);
+                                                                const newA = survivors.filter(d => d.predictedWinner === 'teamA').length;
+                                                                const newB = survivors.filter(d => d.predictedWinner === 'teamB').length;
+                                                                
+                                                                // 4. Update Match Document
+                                                                await databases.updateDocument(DATABASE_ID, MATCHES_ID, m.$id, {
+                                                                    votesA: newA,
+                                                                    votesB: newB
+                                                                });
+                                                                
+                                                                alert(`Purge Complete! Removed ${toPurge.length} legacy votes. Counts re-synced.`);
+                                                                fetchData();
+                                                            } catch (err) { alert(err.message); }
+                                                            finally { setUpdating(null); }
+                                                        }}
+                                                        className="w-full py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-[8px] font-black uppercase rounded transition-all"
+                                                    >
+                                                        Purge Anonymous & Re-Sync Counts 🧹
+                                                    </button>
                                                 </div>
                                             )}
                                         </div>

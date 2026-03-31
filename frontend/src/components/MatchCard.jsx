@@ -210,15 +210,15 @@ const MatchCard = ({ match, matchId, user, profile, logoMap = {} }) => {
         </div>
 
         <div className="w-full">
-          {isCompleted && (
+          {(isCompleted || isStarted || isMatchToday) && (
             <div className="w-full mb-6">
                 <button 
                   onClick={async () => {
                     if (!showWarriors) {
                         try {
                             const res = await databases.listDocuments(DATABASE_ID, PREDICTIONS_ID, [Query.equal('matchId', [matchId])]);
-                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username);
-                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username);
+                            const a = res.documents.filter(d => d.predictedWinner === 'teamA').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
+                            const b = res.documents.filter(d => d.predictedWinner === 'teamB').map(d => d.username || `Warrior #${d.$id.slice(-4)}`);
                             setWarriors({ teamA: a, teamB: b });
                         } catch (err) { console.error(err); }
                     }
